@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="template/layout.xhtml">
+            <ui:define name="content">
+                <h:panelGroup rendered="#{!userSession.logged}">
+                    <h:form id="registerUserForm">
+                        <p:growl id="registerGrowl" showDetail="true" sticky="true"  /> 
+                        <p:panel header="Rejestracja">
+                            <p:panelGrid columns="2">
+                                Imię
+                                <p:inputText value="#{user.user.name}" required="true" />
+
+                                Nazwisko
+                                <p:inputText value="#{user.user.surname}" required="true" />
+
+                                Adres e-mail
+                                <p:inputText value="#{user.user.mail}" required="true" />
+
+                                Hasło
+                                <p:password id="pwd1" value="#{user.user.password}" required="true" feedback="true" 
+                                            match="pwd2"  />
+                                
+                                Powtórz hasło
+                                <p:password id="pwd2" value="#{user.user.password}" required="true" feedback="false" />
+                                
+                                <p:commandButton value="Zarejestruj się" action="#{user.add()}" update="registerGrowl" rendered="#{user.user.mail eq null}" />                                
+                            </p:panelGrid>
+                        </p:panel>
+                    </h:form>
+                </h:panelGroup>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

@@ -1,0 +1,59 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="template/layout.xhtml">
+            <ui:define name="content">
+                <p:dataTable value="#{book.bookList()}" var="item" rendered="#{param.id eq null}">
+                    <p:column headerText="Tytuł" width="60%">
+                        <h:link outcome="book" value="#{item.title}">
+                            <f:param name="id" value="#{item.idBook}" />
+                        </h:link>
+                    </p:column>
+
+                    <p:column headerText="Kategoria">
+                        <h:link outcome="category" value="#{item.categoryId.title}">
+                            <f:param name="id" value="#{item.categoryId.idCategory}" />
+                        </h:link>
+                    </p:column>
+
+                    <p:column headerText="Autor">
+                        <h:link outcome="user" value="#{item.userId.name} #{item.userId.surname}">
+                            <f:param name="id" value="#{item.userId.idUser}" />
+                        </h:link>
+                    </p:column>
+                </p:dataTable>
+
+                <ui:repeat value="#{book.bookById(param.id)}" var="item" rendered="#{param.id != null}">
+                    <h1>#{item.title}</h1>
+                    <p:panelGrid columns="2" style="width: 100%;">
+                        <b>Data dodania</b>
+                        <h:outputText value="#{item.addDate}">
+                            <f:convertDateTime type="date" pattern="dd-MM-yyyy, H:mm" />
+                        </h:outputText>
+                        
+                        <b>Autor</b>
+                        <h:outputText value="#{item.userId.name} #{item.userId.surname} (#{item.userId.mail})" />
+                        
+                        <b>Kategoria</b>
+                        <h:link outcome="category" value="#{item.categoryId.title}">
+                            <f:param name="id" value="#{item.categoryId.idCategory}" />
+                        </h:link>
+                    </p:panelGrid>
+                    <p:panelGrid columns="1" style="width: 100%;">
+                        <h:outputText value="#{item.text}" escape="false" />
+                    </p:panelGrid>
+                </ui:repeat>
+
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

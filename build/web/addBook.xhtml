@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="template/layout.xhtml">
+            <ui:define name="content">
+                <h:panelGrid rendered="#{userSession.logged}">
+                    <h2>Dodaj książkę</h2>
+
+
+
+                    <p:tabView id="addBook">
+
+                        <p:tab id="text" title="Tekst">
+
+                            <h:form id="addBookForm1">
+                                <p:growl id="addBookGrowl" showDetail="true" sticky="true" />
+                                <h:panelGrid columns="2" cellpadding="10">
+                                    Tytuł
+                                    <p:inputText value="#{book.book.title}" required="true" />
+
+                                    Kategoria
+                                    <p:selectOneMenu value="#{book.book.categoryId}" converter="#{CategoryConverter}">
+                                        <f:selectItems value="#{category.categoryList}" var="item" itemValue="#{item.title}" itemLabel="#{item.title}" />
+                                    </p:selectOneMenu>
+
+                                </h:panelGrid>
+                                <p:editor value="#{book.book.text}" width="600" />
+                                <p:commandButton value="Dodaj" action="#{book.add()}" update="addBookGrowl" rendered="#{book.book.title eq null}" />
+                            </h:form>
+                        </p:tab>
+                        <p:tab id="pdf" title="PDF">
+                            <h:form id="addBookForm2" enctype="multipart/form-data"> 
+                                <h:panelGrid columns="2" cellpadding="10">
+                                    Tytuł
+                                    <p:inputText value="#{book.book.title}" required="true" />
+
+                                    Kategoria
+                                    <p:selectOneMenu value="#{book.book.categoryId}" converter="#{CategoryConverter}">
+                                        <f:selectItems value="#{category.categoryList}" var="item" itemValue="#{item.title}" itemLabel="#{item.title}" />
+                                    </p:selectOneMenu>
+
+                                    Plik PDF
+                                    <p:fileUpload mode="simple" value="#{book.file}" style="width: 487px;"/>
+
+                                    <p:commandButton value="Dodaj" actionListener="#{book.uploadPdfBook(event)}" ajax="false" />
+                                </h:panelGrid>
+                            </h:form>
+                        </p:tab>
+                    </p:tabView>
+                </h:panelGrid>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

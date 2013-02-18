@@ -1,0 +1,74 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="../template/layout.xhtml">
+            <ui:define name="content">
+                <h1>Zarządzanie książkami</h1>
+
+                <h:panelGroup rendered="#{book.count eq 0}">
+                    <p>Brak dodanych książek</p>
+                </h:panelGroup>
+
+                <h:panelGroup rendered="#{book.edit}">
+                    <h2>Edytuj książkę</h2>
+                    <h:form id="bookAddForm">
+                        <table>
+                            <tr>
+                                <td>tytuł</td>
+                                <td><h:inputText id="title" value="#{book.book.title}" /></td>
+                            </tr>
+                            <tr>
+                                <td>text</td>
+                                <td><h:inputTextarea id="text" value="#{book.book.text}" cols="50" rows="10" /></td>
+                            </tr>
+                            <tr>
+                                <td>kategoria</td>
+                                <td>
+                                    <h:selectOneMenu id="categoryId" value="#{book.book.categoryId}" converter="#{CategoryConverter}">
+                                        <f:selectItems value="#{category.categoryList}" var="item" itemValue="#{item.title}" itemLabel="#{item.title}" />
+                                    </h:selectOneMenu><br />                                     
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2"><h:commandButton value="Zapisz" action="#{book.save()}" /></td>
+                            </tr>
+                        </table>
+                    </h:form>
+                </h:panelGroup>
+
+                <h:panelGroup rendered="#{book.count != 0}">
+                    <h:form id="bookList">
+                        <table>
+                            <tr>
+                                <td>id</td>
+                                <td>tytuł</td>
+                                <td>kategoria</td>
+                                <td>autor</td>
+                            </tr>
+                            <ui:repeat value="#{book.bookList()}" var="item">
+                                <tr>
+                                    <td>#{item.idBook}</td>
+                                    <td>#{item.title}</td>
+                                    <td>#{item.categoryId.title}</td>
+                                    <td>#{item.userId.mail}</td>
+                                    <td><h:commandButton value="edytuj" action="#{book.edit(item)}" /></td>
+                                    <td><h:commandButton value="usuń" action="#{book.delete(item)}" /></td>
+                                </tr>                                    
+                            </ui:repeat>
+                        </table>
+                    </h:form>
+                </h:panelGroup>
+
+            </ui:define>
+        </ui:composition>
+
+    </h:body>
+</html>
+

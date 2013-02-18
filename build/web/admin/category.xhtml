@@ -1,0 +1,74 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="../template/layout.xhtml">
+            <ui:define name="content">
+                <h1>Zarządzanie kategoriami</h1>
+
+                <h:panelGroup rendered="#{category.count eq 0}">
+                    <p>Brak dostępnych kategorii</p>
+                </h:panelGroup>
+
+                <h:panelGroup rendered="#{!category.edit}">
+                    <h2>Dodaj kategorię</h2>
+                    <h:form id="addCategoryForm">
+                        <table>
+                            <tr>
+                                <td>tytuł</td><td><h:inputText id="title" value="#{category.category.title}" /></td>
+                            </tr>
+                            <tr>
+                                <td>opis</td><td><h:inputText id="description" value="#{category.category.description}" /></td>
+                            </tr>
+                        </table>
+                        <h:commandButton action="#{category.add()}" value="Dodaj" />
+                    </h:form>
+                </h:panelGroup>
+
+                <h:panelGroup rendered="#{category.edit}">
+                    <h2>Edytuj kategorię #{category.category.title}</h2>
+                    <h:form id="editCategoryForm">
+                        <table>
+                            <tr>
+                                <td>tytuł</td><td><h:inputText id="title" value="#{category.category.title}" /></td>
+                            </tr>
+                            <tr>
+                                <td>opis</td><td><h:inputText id="description" value="#{category.category.description}" /></td>
+                            </tr>
+                        </table>
+                        <h:commandButton action="#{category.save()}" value="Zapisz" />
+                    </h:form>
+                </h:panelGroup>
+
+                <h:panelGroup rendered="#{category.count > 0}">
+                    <h2>Lista kategorii</h2>
+                    <h:form id="categoryList">
+                        <h:dataTable value="#{category.categoryList}" var="item" styleClass="table" headerClass="table-header" rowClasses="table-odd-row,table-even-row">
+                            <h:column>
+                                <f:facet name="header">tytuł</f:facet>
+                                #{item.title}
+                            </h:column>
+                            <h:column>
+                                <f:facet name="header">opis</f:facet>
+                                #{item.description}
+                            </h:column>
+                            <h:column>
+                                <h:commandButton value="edytuj" action="#{category.edit(item)}" />
+                            </h:column>
+                            <h:column>
+                                <h:commandButton value="usuń" action="#{category.delete(item)}" />
+                            </h:column>
+                        </h:dataTable>
+                    </h:form>
+                </h:panelGroup>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

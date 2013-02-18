@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="template/layout.xhtml">
+            <ui:define name="content">
+                <h:panelGrid rendered="#{param.id eq null}">
+                    <ol>
+                        <ui:repeat value="#{user.userList}" var="item">
+                            <li><h:link outcome="user" value="#{item.name} #{item.surname}">
+                                <f:param name="id" value="#{item.idUser}" />
+                            </h:link> (#{item.mail})</li>
+                        </ui:repeat>
+                    </ol>
+                </h:panelGrid>
+
+                <h:panelGrid rendered="#{param.id != null}">
+                    <ui:repeat value="#{user.singleUser(param.id)}" var="item">
+                        <h1>#{item.name} #{item.surname}</h1>
+                        <hr />
+                        <b>funkcja w serwisie: </b> #{(item.rank eq 1) ? "administrator" : "redaktor" }<br />
+                        <b>kontakt:</b> #{item.mail}<br />
+                        <hr />
+                    </ui:repeat>
+                    <h2>Dodane książki:</h2>
+                    <ol>
+                        <ui:repeat value="#{book.bookListFromUser(param.id)}" var="item">
+                            <li><h:link outcome="book" value="#{item.title}">
+                                    <f:param name="id" value="#{item.idBook}" />
+                                </h:link> (#{item.addDate})</li>
+                        </ui:repeat>
+                    </ol>
+                </h:panelGrid>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

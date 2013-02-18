@@ -1,0 +1,96 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="../template/layout.xhtml">
+            <ui:define name="content">
+                <h1>Zarządzanie użytkownikami</h1>
+
+                <h:panelGroup rendered="#{user.count eq 0}">
+                    <p>Brak zarejestrowanych użytkowników</p>
+                </h:panelGroup>
+
+                <h:panelGroup rendered="#{!user.edit}">
+                    <h2>Dodaj użytkownika</h2>
+                    <h:form id="userAddForm">
+                        <table>
+                            <tr>
+                                <td>imię</td><td><h:inputText id="name" value="#{user.user.name}" /></td>
+                            </tr>
+                            <tr>
+                                <td>nazwisko</td><td><h:inputText id="surname" value="#{user.user.surname}" /></td>
+                            </tr>
+                            <tr>
+                                <td>e-mail</td><td><h:inputText id="mail" value="#{user.user.mail}" /></td>
+                            </tr>
+                            <tr>
+                                <td>hasło</td><td><h:inputSecret id="password" value="#{user.user.password}" /></td>
+                            </tr>
+                        </table>
+                        <h:messages />
+                        <h:commandButton value="Dodaj" action="#{user.add()}" />
+                    </h:form>
+                </h:panelGroup>
+
+                <h:panelGroup rendered="#{user.edit}">
+                    <h2>Edytuj użytkownika #{user.user.mail}</h2>
+                    <h:form id="userEditForm">
+                        <table>
+                            <tr>
+                                <td>imię</td><td><h:inputText id="name" value="#{user.user.name}" /></td>
+                            </tr>
+                            <tr>
+                                <td>nazwisko</td><td><h:inputText id="surname" value="#{user.user.surname}" /></td>
+                            </tr>
+                            <tr>
+                                <td>e-mail</td><td><h:inputText id="mail" value="#{user.user.mail}" /></td>
+                            </tr>
+                            <tr>
+                                <td>hasło</td><td><h:inputText id="password" value="#{user.user.password}" /></td>
+                            </tr>
+                            <tr>
+                                <td>ranga</td>
+                                <td>
+                                    <h:selectOneMenu id="rank" value="#{user.user.rank}">
+                                        <f:selectItem itemLabel="Administrator" itemValue="1" />
+                                        <f:selectItem itemLabel="Redaktor" itemValue="2" />
+                                    </h:selectOneMenu>
+                                </td>
+                            </tr>
+                        </table>
+                        <h:commandButton value="Zapisz" action="#{user.save()}" />
+                    </h:form>
+                </h:panelGroup>
+
+                <h:panelGroup rendered="#{user.count > 0}">
+                    <h2>Lista użytkowników</h2>
+                    <h:form id="userList">
+                        <table>
+                            <tr>
+                                <td>id</td><td>imie</td><td>nazwisko</td><td>mail</td><td>ranga</td>
+                            </tr>
+                            <ui:repeat value="#{user.userList}" var="item">
+                                <tr>
+                                    <td>#{item.idUser}</td>
+                                    <td>#{item.name}</td>
+                                    <td>#{item.surname}</td>
+                                    <td>#{item.mail}</td>
+                                    <td>#{(item.rank == 1) ? "admin" : "redaktor"}</td>
+                                    <td><h:commandButton value="edytuj" action="#{user.edit(item)}" /></td>
+                                    <td><h:commandButton value="usuń" action="#{user.delete(item)}" /></td>
+                                </tr>
+                            </ui:repeat>
+                        </table>
+                    </h:form>
+                </h:panelGroup>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

@@ -1,0 +1,78 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Facelet Title</title>
+        <h:outputStylesheet name="css/style.css" />
+    </h:head>
+    <h:body>
+        <div id="header">		
+            <div id="top-menu">
+                <ul id="top-menu">
+                    <li><h:outputLink value="#{userSession.url}index.xhtml">Strona główna</h:outputLink></li>
+                    <li><h:outputLink value="#{userSession.url}category.xhtml">Kategorie</h:outputLink></li>
+                    <li><h:outputLink value="#{userSession.url}book.xhtml">Katalog książek</h:outputLink></li>
+                    <li><h:outputLink value="#{userSession.url}user.xhtml">Autorzy</h:outputLink></li>
+                    <li><h:outputLink value="#{userSession.url}contact.xhtml">Kontakt</h:outputLink></li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="main">
+            <div id="logo"><h1>Wiki<span id="color">Books</span></h1></div>
+            <div id="menu" class="round-border">
+
+                <p:growl id="loginGrowl" showDetail="true" sticky="true"  />
+                <p:panel id="loginPanel" header="Zaloguj się" rendered="#{!userSession.logged}">
+                    <h:form id="loginForm">
+                        <h:panelGrid columns="2">
+                            E-mail:
+                            <p:inputText value="#{userSession.user.mail}" />
+
+                            Hasło:
+                            <p:password value="#{userSession.user.password}" />
+                        </h:panelGrid>
+
+                        <h:commandButton action="#{userSession.loginUser()}" value="Zaloguj się" update="loginGrowl" style="margin-top:10px;" />
+
+                        <p style="margin-top: 10px;">Nie masz jeszcze konta? <h:outputLink value="register.xhtml">Zarejestruj się!</h:outputLink></p>
+                    </h:form>
+                </p:panel>
+
+                <p:panel id="userPanel" header="Strefa użytkownika" rendered="#{userSession.logged}">
+                    <h:form id="logoutForm">
+                        <p:panelGrid columns="1" style="width: 100%;">
+                            <h3>Witaj <b>#{userSession.user.name}!</b></h3>
+                            <h:outputLink value="#{userSession.url}addBook.xhtml">Dodaj książkę</h:outputLink>
+                            <h:commandLink value="Wyloguj się" action="#{userSession.logoutUser()}" />
+                        </p:panelGrid>
+                    </h:form>
+                    <p:panelGrid columns="1" rendered="#{userSession.admin}" style="width:100%; margin-top: 10px;">
+                        <h3>(Administrator) Zarządzaj:</h3>
+                        <h:outputLink value="#{userSession.url}admin/user.xhtml">Użytkownikami</h:outputLink>
+                        <h:outputLink value="#{userSession.url}admin/category.xhtml">Kategoriami</h:outputLink>
+                        <h:outputLink value="#{userSession.url}admin/book.xhtml">Książkami</h:outputLink>
+                    </p:panelGrid>
+                </p:panel>
+
+                <h3>Kategorie</h3>
+                <p:dataList value="#{category.categoryList}" var="item">
+                    &raquo; <h:link value="#{item.title}" outcome="category">
+                        <f:param name="id" value="#{item.idCategory}" />
+                    </h:link>
+                </p:dataList>
+            </div>
+            <div id="content" class="round-border">
+                <ui:insert name="content">
+
+                </ui:insert>
+            </div>
+            <div id="footer" class="round-border">&copy; 2013 Mateusz Marczuk - wszystkie prawa zastrzeżone</div>
+        </div>
+    </h:body>
+</html>
+

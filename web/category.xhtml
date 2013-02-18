@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <ui:composition template="template/layout.xhtml">
+            <ui:define name="content">
+                <h:panelGroup rendered="#{param.id == null}">
+                    <h1>Kategorie</h1>
+                    <h:form>
+                        <ul>
+                            <ui:repeat value="#{category.categoryList}" var="item">
+                                <li>&raquo; <h:link value="#{item.title}" outcome="category">
+                                        <f:param name="id" value="#{item.idCategory}" />
+                                    </h:link> #{item.description}</li>
+                            </ui:repeat>
+                        </ul>
+                    </h:form>
+                </h:panelGroup>
+
+
+                <h1>#{category.categoryById(param.id).title}</h1>
+                <p:dataTable value="#{book.bookListFromCategoryId(param.id)}" var="item" rendered="#{param.id != null}">
+                    <p:column headerText="Tytuł" width="60%">
+                        <h:link outcome="book" value="#{item.title}">
+                            <f:param name="id" value="#{item.idBook}" />
+                        </h:link>
+                    </p:column>
+                    
+                    <p:column headerText="Autor">
+                        <h:link outcome="user" value="#{item.userId.name} #{item.userId.surname}">
+                            <f:param name="id" value="#{item.userId.idUser}" />
+                        </h:link>
+                    </p:column>
+                    
+                    <p:column headerText="Data dodania">
+                        <h:outputText value="#{item.addDate}">
+                            <f:convertDateTime type="date" pattern="dd-MM-yyyy, H:mm" />
+                        </h:outputText>
+                    </p:column>
+                </p:dataTable>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+
